@@ -1,0 +1,4 @@
+Django==5.2.8
+pylint
+pre-commit
+python-dotenv==1.2.1
