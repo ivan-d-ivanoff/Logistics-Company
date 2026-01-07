@@ -1,0 +1,125 @@
+{% extends "base_app.html" %}
+
+{% block title %}Reports{% endblock %}
+{% block page %}reports{% endblock %}
+
+{% block content %}
+<header class="app-header">
+  <h1>Reports</h1>
+  <p>Generate and download various reports</p>
+</header>
+
+<section class="card">
+    <div class="card-header">
+        <div>
+          <div class="card-title">Report Filters</div>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:12px; flex-wrap:wrap; padding: 0 18px 18px;">
+        <input id="filterDateFrom" type="date" class="form-control" style="max-width:220px;">
+        <input id="filterDateTo" type="date" class="form-control" style="max-width:220px;">
+
+        <select id="filterEmployee" class="select" style="min-width:240px;">
+          <option value="">Select employee</option>
+        </select>
+
+        <select id="filterClient" class="select" style="min-width:240px;">
+          <option value="">Select client</option>
+        </select>
+      </div>
+</section>
+
+<section class="reports-grid">
+        <div class="report-card">
+        <h3>All Employees Report</h3>
+        <p>Complete list of all company employees with their details.</p>
+        <button class="btn btn-primary" data-report="employees_all">Generate Report</button>
+      </div>
+
+      <div class="report-card">
+        <h3>All Clients Report</h3>
+        <p>Complete list of all registered clients.</p>
+        <button class="btn btn-primary" data-report="clients_all">Generate Report</button>
+      </div>
+
+      <div class="report-card">
+        <h3>All Parcels Report</h3>
+        <p>All parcels registered in the system.</p>
+        <button class="btn btn-primary" data-report="parcels_all">Generate Report</button>
+      </div>
+
+      <div class="report-card">
+        <h3>Parcels by Employee</h3>
+        <p>All parcels registered by a specific employee.</p>
+        <button class="btn btn-primary" data-report="parcels_by_employee">Generate Report</button>
+      </div>
+
+      <div class="report-card">
+        <h3>Pending Deliveries</h3>
+        <p>Parcels that have been sent but not yet received.</p>
+        <button class="btn btn-primary" data-report="pending_deliveries">Generate Report</button>
+      </div>
+
+      <div class="report-card">
+        <h3>Client Sent Parcels</h3>
+        <p>All parcels sent by a specific client.</p>
+        <button class="btn btn-primary" data-report="client_sent">Generate Report</button>
+      </div>
+
+      <div class="report-card">
+        <h3>Client Received Parcels</h3>
+        <p>All parcels received by a specific client.</p>
+        <button class="btn btn-primary" data-report="client_received">Generate Report</button>
+      </div>
+
+      <div class="report-card">
+        <h3>Income Report</h3>
+        <p>Company income for a specified period.</p>
+        <button class="btn btn-primary" data-report="income_period">Generate Report</button>
+      </div>
+</section>
+
+<section class="card">
+    <div class="card-header">
+        <div>
+          <div class="card-title" id="reportTitle">Report Output</div>
+          <div class="card-subtitle" id="reportSubtitle">Select a report to generate.</div>
+        </div>
+      </div>
+
+      <div style="padding: 0 18px 18px;">
+        <div id="reportSummary" style="margin-bottom:10px; color: black; font-size: 13px;"></div>
+        <div class="table-wrapper">
+          <table class="table" id="reportTable">
+            <thead id="reportThead"></thead>
+            <tbody id="reportTbody"></tbody>
+          </table>
+        </div>
+      </div>
+</section>
+
+<!-- modal -->
+<div id="reportModal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close="1"></div>
+
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="reportModalTitle">
+    <div class="modal-header">
+      <div>
+        <div id="reportModalTitle" class="modal-title">Generate Report</div>
+        <div id="reportModalSubtitle" class="modal-subtitle">Choose options</div>
+      </div>
+      <button class="btn-icon" id="reportModalCloseBtn" title="Close">✖️</button>
+    </div>
+
+    <form id="reportModalForm" class="modal-body">
+      <div id="reportModalBody"></div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" id="reportModalCancelBtn">Cancel</button>
+        <button type="submit" class="btn btn-primary">Generate</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

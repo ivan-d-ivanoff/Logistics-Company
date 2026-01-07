@@ -1,0 +1,141 @@
+{% extends "base_app.html" %}
+
+{% block title %}Offices{% endblock %}
+{% block page %}offices{% endblock %}
+
+{% block content %}
+<header class="app-header">
+  <h1>Offices</h1>
+  <p>List of company offices</p>
+</header>
+
+<section class="card">
+  <div class="card-header">
+    <div>
+      <div class="card-title">All Offices</div>
+      <div class="card-subtitle">View and manage company offices</div>
+    </div>
+
+    <div style="display:flex;gap:12px;align-items:center;">
+      <input
+        id="officesSearch"
+        class="search-input"
+        placeholder="Search by name, city, address..."
+      />
+      <button class="btn btn-primary" id="addOfficeBtn">
+        + Add Office
+      </button>
+    </div>
+  </div>
+
+  <div class="table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>NAME</th>
+          <th>CITY</th>
+          <th>ADDRESS</th>
+          <th>PHONE</th>
+          <th>ACTIONS</th>
+        </tr>
+      </thead>
+      <tbody id="officesTableBody"></tbody>
+    </table>
+  </div>
+
+  <div
+    id="officesCountInfo"
+    style="font-size:12px; color: black; margin-top:8px;"
+  >
+    Showing 0 results
+  </div>
+</section>
+
+<!-- Office Modal -->
+<div id="officeModal" class="modal" aria-hidden="true">
+  <div class="modal-backdrop" data-close="1"></div>
+
+  <div
+    class="modal-card"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="officeModalTitle"
+  >
+    <div class="modal-header">
+      <div>
+        <div id="officeModalTitle" class="modal-title">
+          Add Office
+        </div>
+        <div class="modal-subtitle">
+          Create or edit an office
+        </div>
+      </div>
+      <button
+        class="btn-icon"
+        id="officeModalCloseBtn"
+        title="Close"
+      >
+        ✖️
+      </button>
+    </div>
+
+    <form id="officeForm" class="modal-body">
+      <input type="hidden" id="officeId" />
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Office name</label>
+          <input
+            id="oName"
+            class="form-control"
+            placeholder="e.g. Downtown Office"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">City</label>
+          <input
+            id="oCity"
+            class="form-control"
+            placeholder="e.g. Sofia"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Address</label>
+          <input
+            id="oAddress"
+            class="form-control"
+            placeholder="e.g. Main St 1"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Phone</label>
+          <input
+            id="oPhone"
+            class="form-control"
+            placeholder="+359..."
+          />
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-outline"
+          id="officeCancelBtn"
+        >
+          Cancel
+        </button>
+        <button type="submit" class="btn btn-primary">
+          Save
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

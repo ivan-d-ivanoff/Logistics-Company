@@ -1,3 +1,5 @@
+
 from django.shortcuts import render
 
-# Create your views here.
+def parcels(request):
+    return render(request, "parcels/parcels.html")

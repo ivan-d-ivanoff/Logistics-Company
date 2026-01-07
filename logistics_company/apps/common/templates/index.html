@@ -1,0 +1,28 @@
+{% extends "base_public.html" %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+<main class="hero">
+  <div class="hero-content-centered">
+    <h1 class="hero-title">
+      Streamline Your <span>Logistics</span><br />
+      <span>Operations</span>
+    </h1>
+
+    <p class="hero-text">
+      A comprehensive platform for managing parcels, offices,
+      employees, and clients.
+    </p>
+
+    <div class="hero-actions centered">
+      <a href="{% url 'login' %}" class="btn btn-primary">
+        Start Managing
+      </a>
+      <a href="{% url 'track' %}" class="btn btn-outline">
+        Track a Parcel
+      </a>
+    </div>
+  </div>
+</main>
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends "base_app.html" %}
+
+{% block title %}Dashboard{% endblock %}
+{% block page %}dashboard{% endblock %}
+
+{% block content %}
+<header class="app-header">
+  <h1>Dashboard</h1>
+  <p>Welcome back! Here's your logistics overview.</p>
+</header>
+
+<section class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Total Parcels</div>
+        <div class="stat-value">1,234</div>
+        <div class="stat-change">+12% from last month</div>
+        <div class="icon-pill">📦</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">In Transit</div>
+        <div class="stat-value">156</div>
+        <div class="stat-change">+8% from last month</div>
+        <div class="icon-pill">🚚</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Delivered</div>
+        <div class="stat-value">1,078</div>
+        <div class="stat-change">+8% from last month</div>
+        <div class="icon-pill">✅</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Revenue</div>
+        <div class="stat-value">$24,589</div>
+        <div class="stat-change">+15% from last month</div>
+        <div class="icon-pill">💲</div>
+      </div>
+</section>
+
+<section class="stats-row">
+        <div class="stat-card">
+        <div class="stat-label">Active Employees</div>
+        <div class="stat-value">24</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Company Offices</div>
+        <div class="stat-value">8</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Registered Clients</div>
+        <div class="stat-value">456</div>
+        <div class="stat-change">+5% from last month</div>
+      </div>
+</section>
+
+<section class="card">
+          <div class="card-header">
+        <div>
+          <div class="card-title">Recent Parcels</div>
+          <div class="card-subtitle">Latest shipments in the system</div>
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="table">
+          <thead>
+          <tr>
+            <th>Tracking #</th>
+            <th>Sender</th>
+            <th>Recipient</th>
+            <th>Delivery</th>
+            <th>Weight</th>
+            <th>Price</th>
+            <th>Status</th>
+          </tr>
+          </thead>
+          <tbody id="parcelsTableBody">
+          </tbody>
+        </table>
+      </div>
+</section>
+{% endblock %}

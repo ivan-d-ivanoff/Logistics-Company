@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>{% block title %}LogiTrack{% endblock %}</title>
+
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+  {% load static %}
+  <script type="module" src="{% static 'index.js' %}"></script>
+
+</head>
+
+<body data-page="{% block page %}{% endblock %}">
+
+<div class="app-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-brand">
+        <div class="sidebar-logo">📦</div>
+        <div class="sidebar-brand-text">
+          <span>LogiTrack</span>
+          <small>Logistics Management</small>
+        </div>
+      </div>
+
+       <ul class="sidebar-menu">
+        <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+        <li><a href="{% url 'parcels' %}">Parcels</a></li>
+        <li><a href="{% url 'clients' %}">Clients</a></li>
+        <li><a href="{% url 'employees' %}">Employees</a></li>
+        <li><a href="{% url 'offices' %}">Offices</a></li>
+        <li><a href="{% url 'reports' %}">Reports</a></li>
+      </ul>
+    </div>
+
+    <div class="sidebar-bottom">
+      <a href="{% url 'logout' %}">Logout</a>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="app-main">
+    {% block content %}{% endblock %}
+  </main>
+
+</div>
+<script type="module" src="{% static 'index.js' %}"></script>
+
+</body>
+</html>

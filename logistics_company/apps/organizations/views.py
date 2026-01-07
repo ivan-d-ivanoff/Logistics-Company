@@ -1,3 +1,4 @@
 from django.shortcuts import render
 
-# Create your views here.
+def offices(request):
+    return render(request, "organizations/offices.html")

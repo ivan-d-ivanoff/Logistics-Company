@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>{% block title %}LogiTrack – Logistics Management{% endblock %}</title>
+
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'style.css' %}" />
+  {% load static %}
+  <script type="module" src="{% static 'index.js' %}"></script>
+</head>
+
+<body {% block body_attrs %}{% endblock %}>
+
+<header class="navbar">
+  <div class="nav-brand">
+    <div class="nav-logo">📦</div>
+    <span>LogiTrack</span>
+  </div>
+  <div class="nav-actions">
+    <a href="#">
+      <button class="btn btn-outline">Sign In</button>
+    </a>
+    <a href="#">
+      <button class="btn btn-primary">Get Started</button>
+    </a>
+  </div>
+</header>
+
+<main>
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="footer">
+  <div>© 2024 LogiTrack. All rights reserved.</div>
+  <div>Logistics Management</div>
+</footer>
+<script type="module" src="{% static 'index.js' %}"></script>
+
+</body>
+</html>

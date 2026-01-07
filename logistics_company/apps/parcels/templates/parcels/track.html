@@ -1,0 +1,31 @@
+{% extends "base_public.html" %}
+
+{% block title %}Track Your Parcel{% endblock %}
+
+{% block content %}
+<main class="track-main">
+  <div class="track-icon">📦</div>
+
+  <h1 class="track-title">Track Your Parcel</h1>
+
+  <p class="track-sub">
+    Enter your tracking number to see the current status of your delivery.
+  </p>
+
+  <div class="track-form">
+    <input
+      id="trackingInput"
+      class="track-input"
+      placeholder="Enter tracking number (e.g., LT-2024-001234)"
+    />
+    <button id="trackingBtn" class="btn btn-primary">
+      Track
+    </button>
+  </div>
+
+  <p
+    id="trackingResult"
+    style="margin-top: 20px; font-size: 14px;"
+  ></p>
+</main>
+{% endblock %}

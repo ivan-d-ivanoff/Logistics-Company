@@ -1,0 +1,105 @@
+{% extends "base_public.html" %}
+
+{% block title %}Sign In{% endblock %}
+
+{% block body_attrs %}
+class="auth-page" data-page="auth"
+{% endblock %}
+
+{% block content %}
+<main>
+  <section class="auth-wrapper">
+    <div class="auth-header">
+      <div class="nav-logo auth-logo">📦</div>
+      <h1>Welcome</h1>
+      <p>Sign in to your account or create a new one</p>
+    </div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" data-tab="login">
+        Login
+      </button>
+      <button class="auth-tab" data-tab="register">
+        Register
+      </button>
+    </div>
+
+    <!-- LOGIN -->
+    <form id="loginForm">
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input
+          type="email"
+          name="email"
+          class="form-control"
+          placeholder="your@email.com"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input
+          type="password"
+          name="password"
+          class="form-control"
+          placeholder="••••••••"
+          required
+        />
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-primary"
+        style="width: 100%; margin-top: 8px;"
+      >
+        Sign In
+      </button>
+    </form>
+
+    <!-- REGISTER -->
+    <form id="registerForm" style="display: none;">
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input
+          type="text"
+          name="fullName"
+          class="form-control"
+          placeholder="John Doe"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input
+          type="email"
+          name="email"
+          class="form-control"
+          placeholder="john@example.com"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input
+          type="password"
+          name="password"
+          class="form-control"
+          placeholder="••••••••"
+          required
+        />
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-primary"
+        style="width: 100%; margin-top: 8px;"
+      >
+        Create Account
+      </button>
+    </form>
+  </section>
+</main>
+{% endblock %}
