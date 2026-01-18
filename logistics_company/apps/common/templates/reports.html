@@ -1,4 +1,5 @@
 {% extends "base_app.html" %}
+{% load static %}
 
 {% block title %}Reports{% endblock %}
 {% block page %}reports{% endblock %}
@@ -40,13 +41,13 @@
       <div class="report-card">
         <h3>All Clients Report</h3>
         <p>Complete list of all registered clients.</p>
-        <button class="btn btn-primary" data-report="clients_all">Generate Report</button>
+        <button class="btn btn-primary clients_all" data-report="clients_all" data-url="{% url 'reports_clie2nt' %}">Generate Report</button>
       </div>
 
       <div class="report-card">
         <h3>All Parcels Report</h3>
         <p>All parcels registered in the system.</p>
-        <button class="btn btn-primary" data-report="parcels_all">Generate Report</button>
+        <button class="btn btn-primary parcels_all" data-report="parcels_all" data-url="{% url 'reports_client_parcels_all' role='sent' %}">Generate Report</button>
       </div>
 
       <div class="report-card">
@@ -64,13 +65,14 @@
       <div class="report-card">
         <h3>Client Sent Parcels</h3>
         <p>All parcels sent by a specific client.</p>
-        <button class="btn btn-primary" data-report="client_sent">Generate Report</button>
+        <button class="btn btn-primary client_sent" data-report="client_sent" data-url="{% url 'reports_client_parcels' client_id=0 role='sent' %}">Generate Report</button>
       </div>
 
       <div class="report-card">
         <h3>Client Received Parcels</h3>
         <p>All parcels received by a specific client.</p>
-        <button class="btn btn-primary" data-report="client_received">Generate Report</button>
+        <button class="btn btn-primary client_received" data-report="client_received" data-url="{% url 'reports_client_parcels' client_id=0 role='received' %}">Generate Report</button>
+
       </div>
 
       <div class="report-card">
@@ -122,4 +124,8 @@
     </form>
   </div>
 </div>
+{% endblock %}
+
+{% block js %}
+<script type="module" src="{% static 'generate_reports.js' %}"></script>
 {% endblock %}
