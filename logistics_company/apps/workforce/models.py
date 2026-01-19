@@ -8,7 +8,7 @@ class Employee(models.Model):
         MANAGER = "MANAGER", "Manager"
 
     user = models.OneToOneField(
-        "accounts.AppUser",
+        "accounts.User",
         on_delete=models.CASCADE,
         primary_key=True,
         related_name="employee_profile",
@@ -19,7 +19,10 @@ class Employee(models.Model):
         "organizations.Office",
         on_delete=models.PROTECT,
         related_name="employees",
+        null=True,
+        blank=True,
     )
+
     hire_date = models.DateField()
     salary = models.DecimalField(max_digits=10, decimal_places=2)
 

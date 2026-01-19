@@ -1,4 +1,5 @@
-
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.shortcuts import render
 
 from django.http import JsonResponse
@@ -8,8 +9,6 @@ from .models import Parcel
 from apps.people.models import Client
 
 
-def parcels(request):
-    return render(request, "parcels/parcels.html")
 
 def client_parcels_report(request, client_id=None, role="all"):
     """
@@ -66,3 +65,39 @@ def client_parcels_report(request, client_id=None, role="all"):
         "parcels_count": parcels.count(),
         "parcels": data,
     })
+
+
+
+@login_required
+def parcels(request):
+    user = request.user
+
+    is_employee = user.is_superuser or user.role in ("ADMIN", "EMPLOYEE")
+    can_register_parcel = is_employee  # само служители/админ
+
+    if is_employee:
+        parcels_qs = Parcel.objects.all()
+    else:
+        # CLIENT: вижда само пратките, които е изпратил или получил
+        parcels_qs = Parcel.objects.filter(
+            Q(sender_client__user=user) | Q(receiver_client__user=user)
+        )
+
+    # по желание: за по-малко заявки в template
+    parcels_qs = parcels_qs.select_related(
+        "sender_client",
+        "receiver_client",
+        "pickup_address",
+        "delivery_address",
+        "status",
+        "registered_by_employee",
+    ).order_by("-created_at")
+
+    return render(
+        request,
+        "parcels/parcels.html",   # ако при теб е parcels/parcels.html -> смени тук
+        {
+            "parcels": parcels_qs,
+            "can_register_parcel": can_register_parcel,
+        },
+    )

@@ -2,6 +2,12 @@ from django.db import models
 
 
 class Client(models.Model):
+    user = models.OneToOneField(
+        "accounts.User",
+        on_delete=models.CASCADE,
+        related_name="client_profile",
+    )
+
     default_address = models.ForeignKey(
         "common.Address",
         on_delete=models.PROTECT,
@@ -18,4 +24,4 @@ class Client(models.Model):
     )
 
     def __str__(self) -> str:
-        return f"Client #{self.pk}"
+        return f"{self.user.username}"
