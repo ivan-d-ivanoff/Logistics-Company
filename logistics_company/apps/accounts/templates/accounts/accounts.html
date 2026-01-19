@@ -16,16 +16,13 @@ class="auth-page" data-page="auth"
     </div>
 
     <div class="auth-tabs">
-      <button class="auth-tab active" data-tab="login">
-        Login
-      </button>
-      <button class="auth-tab" data-tab="register">
-        Register
-      </button>
+      <span class="auth-tab active">Login</span>
+      <a href="{% url 'register' %}" class="auth-tab">Register</a>
     </div>
 
     <!-- LOGIN -->
-    <form id="loginForm">
+    <form id="loginForm" method="post" action="{% url 'login' %}">
+        {% csrf_token %}
       <div class="form-group">
         <label class="form-label">Email</label>
         <input

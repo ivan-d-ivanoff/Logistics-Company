@@ -7,11 +7,8 @@
 
   <title>{% block title %}LogiTrack{% endblock %}</title>
 
-  {% load static %}
   <link rel="stylesheet" href="{% static 'style.css' %}">
-  {% load static %}
   <script type="module" src="{% static 'index.js' %}"></script>
-
 </head>
 
 <body data-page="{% block page %}{% endblock %}">
@@ -29,18 +26,34 @@
         </div>
       </div>
 
-       <ul class="sidebar-menu">
-        <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
-        <li><a href="{% url 'parcels' %}">Parcels</a></li>
-        <li><a href="{% url 'clients' %}">Clients</a></li>
-        <li><a href="{% url 'employees' %}">Employees</a></li>
-        <li><a href="{% url 'offices' %}">Offices</a></li>
-        <li><a href="{% url 'reports' %}">Reports</a></li>
+      <ul class="sidebar-menu">
+
+        {% if request.user.is_authenticated %}
+
+          {% if request.user.role == "CLIENT" %}
+            <li><a href="{% url 'client_dashboard' %}">Dashboard</a></li>
+            <li><a href="{% url 'parcels' %}">Parcels</a></li>
+
+          {% else %}
+            <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+            <li><a href="{% url 'parcels' %}">Parcels</a></li>
+            <li><a href="{% url 'clients' %}">Clients</a></li>
+            <li><a href="{% url 'employees' %}">Employees</a></li>
+            <li><a href="{% url 'offices' %}">Offices</a></li>
+            <li><a href="{% url 'reports' %}">Reports</a></li>
+          {% endif %}
+
+        {% else %}
+          <li><a href="{% url 'login' %}">Login</a></li>
+        {% endif %}
+
       </ul>
     </div>
 
     <div class="sidebar-bottom">
-      <a href="{% url 'logout' %}">Logout</a>
+      {% if request.user.is_authenticated %}
+        <a href="{% url 'logout' %}">Logout</a>
+      {% endif %}
     </div>
   </aside>
 

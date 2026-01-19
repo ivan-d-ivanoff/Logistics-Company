@@ -1,0 +1,21 @@
+{% extends "base_app.html" %}
+
+{% block title %}Client Dashboard{% endblock %}
+
+{% block content %}
+  <div class="app-header">
+    <h1>Client dashboard</h1>
+    <p>Welcome, {{ request.user.first_name }} {{ request.user.last_name }} ({{ request.user.email }})</p>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div>
+        <div class="card-title">My parcels</div>
+        <div class="card-subtitle">Here will be the list of parcels you sent/received.</div>
+      </div>
+    </div>
+
+    <p>Next step: ще вържем тук “моите пратки” (т.7).</p>
+  </div>
+{% endblock %}

@@ -21,9 +21,11 @@
         class="search-input"
         placeholder="Search by tracking, sender, recipient..."
       />
-      <button class="btn btn-primary" id="registerParcelBtn">
-        + Register Parcel
-      </button>
+      {% if can_register_parcel %}
+        <button class="btn btn-primary" id="registerParcelBtn">
+          + Register Parcel
+        </button>
+      {% endif %}
     </div>
   </div>
 
@@ -51,6 +53,7 @@
   ></div>
 </section>
 
+{% if can_register_parcel %}
 <!-- Parcel Modal -->
 <div id="parcelModal" class="modal" aria-hidden="true">
   <div class="modal-backdrop" data-close="1"></div>
@@ -189,4 +192,5 @@
     </form>
   </div>
 </div>
+{% endif %}
 {% endblock %}
