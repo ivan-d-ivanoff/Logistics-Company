@@ -1,0 +1,13 @@
+{% extends "base_app.html" %}
+
+{% block title %}Delete Parcel{% endblock %}
+
+{% block content %}
+<h2>Delete parcel {{ parcel.tracking_number }}?</h2>
+
+<form method="post">
+  {% csrf_token %}
+  <button type="submit" class="btn btn-danger">Yes, delete</button>
+  <a href="{% url 'parcel_list' %}">Cancel</a>
+</form>
+{% endblock %}

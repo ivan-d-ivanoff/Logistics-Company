@@ -1,0 +1,28 @@
+{% extends "base_app.html" %}
+
+{% block title %}
+  {% if employee %}Edit{% else %}Create{% endif %} Employee
+{% endblock %}
+
+{% block content %}
+<h1>
+  {% if employee %}Edit{% else %}Create{% endif %} Employee
+</h1>
+
+<form method="post">
+  {% csrf_token %}
+
+  <fieldset>
+    <legend>User information</legend>
+    {{ user_form.as_p }}
+  </fieldset>
+
+  <fieldset>
+    <legend>Employee details</legend>
+    {{ employee_form.as_p }}
+  </fieldset>
+
+  <button type="submit" class="btn btn-primary">Save</button>
+  <a href="{% url 'employee_list' %}">Cancel</a>
+</form>
+{% endblock %}

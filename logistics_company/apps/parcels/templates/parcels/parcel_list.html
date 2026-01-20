@@ -1,0 +1,40 @@
+{% extends "base_app.html" %}
+
+{% block title %}Parcels{% endblock %}
+{% block page %}parcels{% endblock %}
+
+{% block content %}
+<h1>Parcels</h1>
+
+<a href="{% url 'parcel_create' %}" class="btn btn-primary">
+  + Create parcel
+</a>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Tracking</th>
+      <th>Status</th>
+      <th>Price</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for parcel in parcels %}
+      <tr>
+        <td>{{ parcel.tracking_number }}</td>
+        <td>{{ parcel.status }}</td>
+        <td>{{ parcel.price }}</td>
+        <td>
+          <a href="{% url 'parcel_update' parcel.pk %}">Edit</a>
+          <a href="{% url 'parcel_delete' parcel.pk %}">Delete</a>
+        </td>
+      </tr>
+    {% empty %}
+      <tr>
+        <td colspan="4">No parcels</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

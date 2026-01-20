@@ -1,0 +1,81 @@
+{% extends "base_app.html" %}
+
+{% block title %}
+  {% if company %}Edit{% else %}Create{% endif %} Company
+{% endblock %}
+
+{% block page %}companies{% endblock %}
+
+{% block content %}
+<header class="app-header">
+  <h1>
+    {% if company %}Edit{% else %}Create{% endif %} Company
+  </h1>
+</header>
+
+<section class="card">
+  <form method="post">
+    {% csrf_token %}
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label">Name</label>
+        <input
+          type="text"
+          name="name"
+          class="form-control"
+          value="{{ company.name|default:'' }}"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Bulstat</label>
+        <input
+          type="text"
+          name="bulstat"
+          class="form-control"
+          value="{{ company.bulstat|default:'' }}"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Phone</label>
+        <input
+          type="text"
+          name="phone"
+          class="form-control"
+          value="{{ company.phone|default:'' }}"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Address</label>
+        <select name="address" class="select" required>
+          <option value="">Select address</option>
+          {% for a in addresses %}
+            <option value="{{ a.id }}"
+              {% if company and company.address and company.address.id == a.id %}
+                selected
+              {% endif %}
+            >
+              {{ a }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary">
+        Save
+      </button>
+      <a href="{% url 'company_list' %}" class="btn btn-outline">
+        Cancel
+      </a>
+    </div>
+  </form>
+</section>
+{% endblock %}

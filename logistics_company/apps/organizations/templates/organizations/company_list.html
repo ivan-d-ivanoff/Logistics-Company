@@ -1,0 +1,23 @@
+{% extends "base_app.html" %}
+
+{% block title %}Companies{% endblock %}
+{% block page %}companies{% endblock %}
+
+{% block content %}
+<h1>Companies</h1>
+
+<a href="{% url 'company_create' %}" class="btn btn-primary">
+  Add company
+</a>
+
+<ul>
+  {% for c in companies %}
+    <li>
+      {{ c.name }}
+      <a href="{% url 'company_edit' c.pk %}">Edit</a>
+      <a href="{% url 'company_delete' c.pk %}">Delete</a>
+    </li>
+  {% endfor %}
+</ul>
+{% endblock %}
+

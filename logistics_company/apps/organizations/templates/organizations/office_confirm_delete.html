@@ -1,0 +1,19 @@
+{% extends "base_app.html" %}
+{% block title %}Delete Office{% endblock %}
+{% block page %}offices{% endblock %}
+
+{% block content %}
+<header class="app-header">
+  <h1>Delete Office</h1>
+</header>
+
+<section class="card">
+  <p>Are you sure you want to delete <strong>{{ office.name }}</strong>?</p>
+
+  <form method="post">
+    {% csrf_token %}
+    <button class="btn btn-danger">Yes, delete</button>
+    <a href="{% url 'office_list' %}" class="btn btn-outline">Cancel</a>
+  </form>
+</section>
+{% endblock %}

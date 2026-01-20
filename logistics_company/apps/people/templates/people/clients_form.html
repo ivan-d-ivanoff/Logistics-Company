@@ -1,0 +1,20 @@
+{% extends "base_app.html" %}
+
+{% block title %}
+  {% if client %}Edit{% else %}Create{% endif %} Client
+{% endblock %}
+
+{% block content %}
+<h1>
+  {% if client %}Edit{% else %}Create{% endif %} Client
+</h1>
+
+<form method="post">
+  {% csrf_token %}
+
+  {{ form.as_p }}
+
+  <button type="submit" class="btn btn-primary">Save</button>
+  <a href="{% url 'client_list' %}">Cancel</a>
+</form>
+{% endblock %}

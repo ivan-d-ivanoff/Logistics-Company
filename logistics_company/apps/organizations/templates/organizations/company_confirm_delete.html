@@ -1,0 +1,31 @@
+{% extends "base_app.html" %}
+
+{% block title %}Delete Company{% endblock %}
+{% block page %}companies{% endblock %}
+
+{% block content %}
+<header class="app-header">
+  <h1>Delete Company</h1>
+</header>
+
+<section class="card">
+  <p>
+    Are you sure you want to delete
+    <strong>{{ company.name }}</strong>?
+  </p>
+
+  <form method="post">
+    {% csrf_token %}
+
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-danger">
+        Yes, delete
+      </button>
+
+      <a href="{% url 'company_list' %}" class="btn btn-outline">
+        Cancel
+      </a>
+    </div>
+  </form>
+</section>
+{% endblock %}
