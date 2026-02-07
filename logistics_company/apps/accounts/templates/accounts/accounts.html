@@ -2,101 +2,93 @@
 
 {% block title %}Sign In{% endblock %}
 
-{% block body_attrs %}
-class="auth-page" data-page="auth"
-{% endblock %}
+{% block body_attrs %}class="bg-light"{% endblock %}
 
 {% block content %}
-<main>
-  <section class="auth-wrapper">
-    <div class="auth-header">
-      <div class="nav-logo auth-logo">📦</div>
-      <h1>Welcome</h1>
-      <p>Sign in to your account or create a new one</p>
+<section class="min-vh-100 d-flex align-items-center py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-5 col-xl-4">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body p-4 p-md-5">
+            <div class="text-center mb-4">
+              <div class="bg-primary text-white rounded d-inline-flex align-items-center justify-content-center mb-3" style="width: 50px; height: 50px;">
+                <i class="bi bi-box-seam fs-4"></i>
+              </div>
+              <h4 class="fw-bold">Welcome</h4>
+              <p class="text-muted small">Sign in to your account or create a new one</p>
+            </div>
+
+            <ul class="nav nav-pills nav-fill mb-4" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#loginTab" type="button">Login</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <a href="{% url 'register' %}" class="nav-link">Register</a>
+              </li>
+            </ul>
+
+            <div class="tab-content">
+              <div class="tab-pane fade show active" id="loginTab">
+                <form id="loginForm" method="post" action="{% url 'login' %}">
+                  {% csrf_token %}
+                  <div id="loginError" class="alert alert-danger py-2 d-none">
+                    <small>Incorrect credentials</small>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label small">Email</label>
+                    <input type="email" name="email" id="loginEmail" class="form-control" placeholder="your@email.com" required>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label small">Password</label>
+                    <input type="password" name="password" id="loginPassword" class="form-control" placeholder="Enter password" required>
+                  </div>
+                  <button type="submit" class="btn btn-primary w-100" id="loginBtn">Sign In</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+</section>
+{% endblock %}
 
-    <div class="auth-tabs">
-      <span class="auth-tab active">Login</span>
-      <a href="{% url 'register' %}" class="auth-tab">Register</a>
-    </div>
+{% block js %}
+<script>
+$(document).ready(function() {
+    $('#loginForm').on('submit', function(e) {
+        e.preventDefault();
 
-    <!-- LOGIN -->
-    <form id="loginForm" method="post" action="{% url 'login' %}">
-        {% csrf_token %}
-      <div class="form-group">
-        <label class="form-label">Email</label>
-        <input
-          type="email"
-          name="email"
-          class="form-control"
-          placeholder="your@email.com"
-          required
-        />
-      </div>
+        var $form = $(this);
+        var $error = $('#loginError');
+        var $btn = $('#loginBtn');
 
-      <div class="form-group">
-        <label class="form-label">Password</label>
-        <input
-          type="password"
-          name="password"
-          class="form-control"
-          placeholder="••••••••"
-          required
-        />
-      </div>
+        $error.addClass('d-none');
+        $btn.prop('disabled', true).text('Signing in...');
 
-      <button
-        type="submit"
-        class="btn btn-primary"
-        style="width: 100%; margin-top: 8px;"
-      >
-        Sign In
-      </button>
-    </form>
-
-    <!-- REGISTER -->
-    <form id="registerForm" style="display: none;">
-      <div class="form-group">
-        <label class="form-label">Full Name</label>
-        <input
-          type="text"
-          name="fullName"
-          class="form-control"
-          placeholder="John Doe"
-          required
-        />
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Email</label>
-        <input
-          type="email"
-          name="email"
-          class="form-control"
-          placeholder="john@example.com"
-          required
-        />
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Password</label>
-        <input
-          type="password"
-          name="password"
-          class="form-control"
-          placeholder="••••••••"
-          required
-        />
-      </div>
-
-      <button
-        type="submit"
-        class="btn btn-primary"
-        style="width: 100%; margin-top: 8px;"
-      >
-        Create Account
-      </button>
-    </form>
-  </section>
-</main>
+        $.ajax({
+            url: $form.attr('action'),
+            type: 'POST',
+            data: $form.serialize(),
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            success: function(response) {
+                if (response.success) {
+                    window.location.href = response.redirect;
+                } else {
+                    $error.removeClass('d-none').find('small').text(response.error);
+                    $btn.prop('disabled', false).text('Sign In');
+                }
+            },
+            error: function() {
+                $error.removeClass('d-none').find('small').text('An error occurred. Please try again.');
+                $btn.prop('disabled', false).text('Sign In');
+            }
+        });
+    });
+});
+</script>
 {% endblock %}

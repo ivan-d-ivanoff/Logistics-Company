@@ -76,7 +76,6 @@ function render() {
     countEl.textContent = `Showing ${visible.length} results`;
   }
 
-  // само admin може да управлява
   if (!isAdmin()) {
     const addBtn = qs("addOfficeBtn");
     if (addBtn) addBtn.style.display = "none";
@@ -139,7 +138,6 @@ function onSave(e) {
 
   const offices = getOffices();
 
-  // EDIT
   if (idRaw) {
     const id = Number(idRaw);
     const idx = offices.findIndex(o => o.id === id);
@@ -153,7 +151,6 @@ function onSave(e) {
     return;
   }
 
-  // CREATE
   offices.push({ id: Date.now(), name, city, address, phone });
   saveOffices(offices);
 
@@ -161,14 +158,12 @@ function onSave(e) {
   render();
 }
 
-/* ===== init ===== */
 export default function initOfficesPage() {
   console.log("Offices JS loaded");
 
   const tbody = qs("officesTableBody");
   if (!tbody) return;
 
-  // initial render
   render();
 
   qs("addOfficeBtn")?.addEventListener("click", openAdd);

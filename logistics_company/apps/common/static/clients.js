@@ -132,4 +132,90 @@ function openEdit(id) {
   openModal("Edit Client");
 }
 
-f
+function deleteClient(id) {
+  if (!isAdmin()) return alert("Only admin can manage clients.");
+  if (!confirm("Delete this client?")) return;
+
+  const clients = getClients();
+  const c = clients.find(x => x.id === id);
+  if (c) {
+    removeClientUser(c.email);
+  }
+  saveClients(clients.filter(x => x.id !== id));
+  render();
+}
+
+function saveClient(e) {
+  e.preventDefault();
+  if (!isAdmin()) return alert("Only admin can manage clients.");
+
+  const id = qs("clientId").value;
+  const name = qs("cName").value.trim();
+  const email = qs("cEmail").value.trim();
+  const phone = qs("cPhone").value.trim();
+  const password = qs("cPassword").value;
+
+  if (!name || !email) {
+    return alert("Name and Email are required.");
+  }
+
+  const clients = getClients();
+  const existingIdx = clients.findIndex(c => c.id === (id ? Number(id) : -1));
+
+  if (existingIdx >= 0) {
+    clients[existingIdx] = { ...clients[existingIdx], name, email, phone };
+  } else {
+    clients.push({ id: Date.now(), name, email, phone });
+  }
+
+  saveClients(clients);
+  upsertClientAsUser({ name, email, password });
+
+  closeModal();
+  render();
+}
+
+function init() {
+  const searchInput = qs("clientsSearch");
+  if (searchInput) {
+    searchInput.addEventListener("input", e => {
+      query = e.target.value;
+      render();
+    });
+  }
+
+  const addBtn = qs("addClientBtn");
+  if (addBtn) {
+    addBtn.addEventListener("click", openAdd);
+  }
+
+  const tbody = qs("clientsTableBody");
+  if (tbody) {
+    tbody.addEventListener("click", e => {
+      const btn = e.target.closest("button[data-action]");
+      if (!btn) return;
+      const action = btn.dataset.action;
+      const id = Number(btn.dataset.id);
+      if (action === "edit") openEdit(id);
+      if (action === "delete") deleteClient(id);
+    });
+  }
+
+  const form = qs("clientForm");
+  if (form) {
+    form.addEventListener("submit", saveClient);
+  }
+
+  const closeBtn = modal()?.querySelector(".modal-close");
+  if (closeBtn) {
+    closeBtn.addEventListener("click", closeModal);
+  }
+
+  modal()?.addEventListener("click", e => {
+    if (e.target === modal()) closeModal();
+  });
+
+  render();
+}
+
+document.addEventListener("DOMContentLoaded", init);

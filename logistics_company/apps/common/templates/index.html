@@ -1,28 +1,29 @@
 {% extends "base_public.html" %}
 
-{% block title %}{% endblock %}
+{% block title %}LogiTrack - Streamline Your Logistics{% endblock %}
 
 {% block content %}
-<main class="hero">
-  <div class="hero-content-centered">
-    <h1 class="hero-title">
-      Streamline Your <span>Logistics</span><br />
-      <span>Operations</span>
-    </h1>
-
-    <p class="hero-text">
-      A comprehensive platform for managing parcels, offices,
-      employees, and clients.
-    </p>
-
-    <div class="hero-actions centered">
-      <a href="{% url 'login' %}" class="btn btn-primary">
-        Start Managing
-      </a>
-      <a href="{% url 'track' %}" class="btn btn-outline">
-        Track a Parcel
-      </a>
+<section class="bg-light min-vh-100 d-flex align-items-center">
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 text-center">
+        <h1 class="display-4 fw-bold mb-3">
+          Streamline Your <span class="text-primary">Logistics</span><br>
+          <span class="text-primary">Operations</span>
+        </h1>
+        <p class="lead text-muted mb-4">
+          A comprehensive platform for managing parcels, offices, employees, and clients.
+        </p>
+        <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+          <a href="{% url 'login' %}" class="btn btn-primary btn-lg px-4">
+            <i class="bi bi-rocket-takeoff me-2"></i>Start Managing
+          </a>
+          <a href="{% url 'track' %}" class="btn btn-outline-secondary btn-lg px-4">
+            <i class="bi bi-search me-2"></i>Track a Parcel
+          </a>
+        </div>
+      </div>
     </div>
   </div>
-</main>
+</section>
 {% endblock %}

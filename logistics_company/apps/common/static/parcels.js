@@ -246,7 +246,6 @@ function onSaveParcel(e) {
 
   const parcels = getParcels();
 
-  // EDIT
   if (idRaw) {
     const id = Number(idRaw);
     const idx = parcels.findIndex(p => p.id === id);
@@ -281,7 +280,6 @@ function onSaveParcel(e) {
     return;
   }
 
-  // CREATE
   const newParcel = {
     id: Date.now(),
     tracking,
