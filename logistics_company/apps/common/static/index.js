@@ -14,13 +14,10 @@ import initReportsPage from "./reports.js";
 document.addEventListener("DOMContentLoaded", () => {
   console.log("Main JS loaded");
 
-  // 1️⃣ Seed demo data (само веднъж)
   seedDemoData();
 
-  // 2️⃣ Определи страницата
   const page = document.body.dataset.page;
 
-  // 3️⃣ Public pages (без sidebar)
   if (page === "auth") {
     initAuthPage();
     return;
@@ -31,7 +28,6 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // 4️⃣ App pages (с sidebar)
   if (!page) return;
 
   initSidebar(page);

@@ -4,169 +4,381 @@
 {% block page %}employees{% endblock %}
 
 {% block content %}
-<header class="app-header">
-  <h1>Employees</h1>
-  <p>Manage company staff and couriers</p>
-</header>
-
-<section class="card">
-  <div class="card-header">
-    <div>
-      <div class="card-title">All Employees</div>
-      <div class="card-subtitle">View and manage company employees</div>
-    </div>
-
-    <div style="display:flex; gap:12px; align-items:center;">
-      <input
-        id="employeesSearch"
-        class="search-input"
-        placeholder="Search by name or email..."
-      />
-      <button id="addEmployeeBtn" class="btn btn-primary">
-        + Add Employee
-      </button>
-    </div>
-  </div>
-
-  <div class="table-wrapper">
-    <table class="table">
-      <thead>
-        <tr>
-          <th>NAME</th>
-          <th>EMAIL</th>
-          <th>POSITION</th>
-          <th>OFFICE</th>
-          <th>PHONE</th>
-          <th>ACTIONS</th>
-        </tr>
-      </thead>
-      <tbody id="employeesTableBody"></tbody>
-    </table>
-  </div>
-
-  <div
-    id="employeesCountInfo"
-    style="font-size:12px; color: black; margin-top:8px;"
-  >
-    Showing 0 results
-  </div>
-</section>
-
-<!-- Employee Modal -->
-<div id="employeeModal" class="modal" aria-hidden="true">
-  <div class="modal-backdrop" data-close="1"></div>
-
-  <div
-    class="modal-card"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="employeeModalTitle"
-  >
-    <div class="modal-header">
-      <div>
-        <div id="employeeModalTitle" class="modal-title">
-          Add Employee
-        </div>
-        <div class="modal-subtitle">
-          Create or edit an employee profile
-        </div>
-      </div>
-      <button
-        class="btn-icon"
-        id="employeeModalCloseBtn"
-        title="Close"
-      >
-        ✖️
-      </button>
-    </div>
-
-    <form id="employeeForm" class="modal-body">
-      <input type="hidden" id="employeeId" />
-
-      <div class="form-grid">
-        <div class="form-group">
-          <label class="form-label">Full name</label>
-          <input
-            id="empName"
-            class="form-control"
-            placeholder="e.g. John Doe"
-            required
-          />
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Email</label>
-          <input
-            id="empEmail"
-            type="email"
-            class="form-control"
-            placeholder="e.g. john@logitrack.com"
-            required
-          />
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Position</label>
-          <select id="empRole" class="select" required>
-            <option value="Courier">Courier</option>
-            <option value="Office Staff">Office Staff</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Office</label>
-          <input
-            id="empOffice"
-            class="form-control"
-            placeholder="e.g. Downtown Office"
-            required
-          />
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Phone</label>
-          <input
-            id="empPhone"
-            class="form-control"
-            placeholder="+359..."
-          />
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">
-            Login password (optional)
-          </label>
-          <input
-            id="empPassword"
-            type="password"
-            class="form-control"
-            placeholder="Leave empty to keep existing / default"
-          />
-          <small
-            style="color: var(--text-muted); display:block; margin-top:6px;"
-          >
-            If set, this employee can log in with role <b>employee</b>.
-          </small>
-        </div>
-      </div>
-
-      <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-outline"
-          id="employeeCancelBtn"
-        >
-          Cancel
-        </button>
-        <button
-          type="submit"
-          class="btn btn-primary"
-          id="employeeSaveBtn"
-        >
-          Save
-        </button>
-      </div>
-    </form>
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
+  <div>
+    <h1 class="h3 mb-1">Employees</h1>
+    <p class="text-muted mb-0">Manage company staff and couriers</p>
   </div>
 </div>
+
+<div class="card border-0 shadow-sm">
+  <div class="card-header bg-white py-3">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
+      <div>
+        <h5 class="card-title mb-0">All Employees</h5>
+        <small class="text-muted">View and manage company employees</small>
+      </div>
+      <div class="d-flex flex-column flex-sm-row gap-2 w-100 w-md-auto">
+        <input id="employeesSearch" class="form-control" placeholder="Search by name or email..." style="min-width: 250px;">
+        <button class="btn btn-primary" id="addEmployeeBtn">
+          <i class="bi bi-plus-lg me-1"></i>Add Employee
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Type</th>
+            <th>Office</th>
+            <th>Phone</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="employeesTableBody">
+          <tr>
+            <td colspan="7" class="text-center text-muted py-4">
+              <div class="spinner-border spinner-border-sm me-2"></div>Loading employees...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card-footer bg-white">
+    <small id="employeesCountInfo" class="text-muted">Loading...</small>
+  </div>
+</div>
+
+<!-- Employee Modal -->
+<div class="modal fade" id="employeeModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <h5 class="modal-title" id="employeeModalTitle">Add Employee</h5>
+          <small class="text-muted" id="employeeModalSubtitle">Create a new employee profile</small>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form id="employeeForm">
+        <div class="modal-body">
+          <input type="hidden" id="employeeId">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Username <span class="text-danger">*</span></label>
+              <input id="empUsername" class="form-control" placeholder="e.g. john_doe" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Email <span class="text-danger">*</span></label>
+              <input id="empEmail" type="email" class="form-control" placeholder="e.g. john@company.bg" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">First Name <span class="text-danger">*</span></label>
+              <input id="empFirstName" class="form-control" placeholder="e.g. John" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Last Name <span class="text-danger">*</span></label>
+              <input id="empLastName" class="form-control" placeholder="e.g. Doe" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Employee Code <span class="text-danger">*</span></label>
+              <input id="empCode" class="form-control" placeholder="e.g. EMP-005" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Type <span class="text-danger">*</span></label>
+              <select id="empType" class="form-select" required>
+                <option value="">Select type...</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Office</label>
+              <select id="empOffice" class="form-select">
+                <option value="">No office assigned</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Phone</label>
+              <input id="empPhone" class="form-control" placeholder="+359...">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Hire Date <span class="text-danger">*</span></label>
+              <input id="empHireDate" type="date" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Salary <span class="text-danger">*</span></label>
+              <input id="empSalary" type="number" step="0.01" min="0" class="form-control" placeholder="e.g. 2000.00" required>
+            </div>
+            <div class="col-12">
+              <label class="form-label">Password</label>
+              <input id="empPassword" type="password" class="form-control" placeholder="Leave empty to keep default/existing">
+              <small class="text-muted">Default password for new employees: employee123</small>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="employeeSaveBtn">
+            <i class="bi bi-check-lg me-1"></i>Save Employee
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete Employee</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete <strong id="deleteName"></strong>?</p>
+        <p class="text-muted small mb-0">This will also delete their user account.</p>
+      </div>
+      <div class="modal-footer">
+        <input type="hidden" id="deleteEmployeeId">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger" id="deleteConfirmBtn">
+          <i class="bi bi-trash me-1"></i>Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+var csrftoken = '{{ csrf_token }}';
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+
+$(document).ready(function() {
+    var employeesData = [];
+    var metadata = {};
+    var employeeModal = new bootstrap.Modal(document.getElementById('employeeModal'));
+    var deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+
+    // Load employees
+    function loadEmployees() {
+        $.ajax({
+            url: '/workforce/api/employees/',
+            type: 'GET',
+            success: function(response) {
+                if (response.success) {
+                    employeesData = response.employees;
+                    metadata = {
+                        offices: response.offices || [],
+                        employee_types: response.employee_types || []
+                    };
+                    renderTable();
+                    populateDropdowns();
+                }
+            },
+            error: function() {
+                $('#employeesTableBody').html('<tr><td colspan="7" class="text-center text-danger py-4">Error loading employees.</td></tr>');
+            }
+        });
+    }
+
+    // Render table
+    function renderTable(filteredData) {
+        var data = filteredData || employeesData;
+        var tbody = $('#employeesTableBody');
+        tbody.empty();
+
+        if (data.length === 0) {
+            tbody.html('<tr><td colspan="7" class="text-center text-muted py-4"><i class="bi bi-people fs-1 d-block mb-2"></i>No employees found.</td></tr>');
+            $('#employeesCountInfo').text('No employees');
+            return;
+        }
+
+        data.forEach(function(e) {
+            var row = '<tr data-id="' + e.id + '">' +
+                '<td><code>' + e.employee_code + '</code></td>' +
+                '<td>' + e.first_name + ' ' + e.last_name + '</td>' +
+                '<td>' + e.email + '</td>' +
+                '<td><span class="badge bg-secondary">' + e.employee_type_display + '</span></td>' +
+                '<td>' + (e.office_name || '-') + '</td>' +
+                '<td>' + (e.phone || '-') + '</td>' +
+                '<td class="text-nowrap">' +
+                    '<button class="btn btn-sm btn-outline-secondary me-1" onclick="openEditModal(' + e.id + ')" title="Edit"><i class="bi bi-pencil"></i></button>' +
+                    '<button class="btn btn-sm btn-outline-danger" onclick="openDeleteModal(' + e.id + ')" title="Delete"><i class="bi bi-trash"></i></button>' +
+                '</td>' +
+                '</tr>';
+            tbody.append(row);
+        });
+
+        $('#employeesCountInfo').html('Showing <strong>' + data.length + '</strong> employee' + (data.length !== 1 ? 's' : ''));
+    }
+
+    // Populate dropdowns
+    function populateDropdowns() {
+        var typeOptions = '<option value="">Select type...</option>';
+        metadata.employee_types.forEach(function(t) {
+            typeOptions += '<option value="' + t.value + '">' + t.label + '</option>';
+        });
+        $('#empType').html(typeOptions);
+
+        var officeOptions = '<option value="">No office assigned</option>';
+        metadata.offices.forEach(function(o) {
+            officeOptions += '<option value="' + o.id + '">' + o.name + ' (' + o.code + ')</option>';
+        });
+        $('#empOffice').html(officeOptions);
+    }
+
+    // Search
+    $('#employeesSearch').on('keyup', function() {
+        var q = $(this).val().toLowerCase();
+        if (!q) {
+            renderTable();
+            return;
+        }
+        var filtered = employeesData.filter(function(e) {
+            return e.first_name.toLowerCase().includes(q) ||
+                   e.last_name.toLowerCase().includes(q) ||
+                   e.email.toLowerCase().includes(q) ||
+                   e.employee_code.toLowerCase().includes(q);
+        });
+        renderTable(filtered);
+    });
+
+    // Add Employee
+    $('#addEmployeeBtn').on('click', function() {
+        $('#employeeId').val('');
+        $('#employeeForm')[0].reset();
+        $('#empHireDate').val(new Date().toISOString().split('T')[0]);
+        $('#employeeModalTitle').text('Add Employee');
+        $('#employeeModalSubtitle').text('Create a new employee profile');
+        $('#empUsername').prop('disabled', false);
+        employeeModal.show();
+    });
+
+    // Save Employee
+    $('#employeeForm').on('submit', function(e) {
+        e.preventDefault();
+        var id = $('#employeeId').val();
+        var data = {
+            username: $('#empUsername').val(),
+            email: $('#empEmail').val(),
+            first_name: $('#empFirstName').val(),
+            last_name: $('#empLastName').val(),
+            employee_code: $('#empCode').val(),
+            employee_type: $('#empType').val(),
+            office_id: $('#empOffice').val() || null,
+            phone: $('#empPhone').val(),
+            hire_date: $('#empHireDate').val(),
+            salary: $('#empSalary').val(),
+            password: $('#empPassword').val()
+        };
+
+        var url = id ? '/workforce/api/employees/' + id + '/' : '/workforce/api/employees/create/';
+        var method = id ? 'PUT' : 'POST';
+
+        $('#employeeSaveBtn').prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span>Saving...');
+
+        $.ajax({
+            url: url,
+            type: method,
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function(response) {
+                if (response.success) {
+                    employeeModal.hide();
+                    loadEmployees();
+                } else {
+                    alert('Error: ' + response.error);
+                }
+            },
+            error: function(xhr) {
+                var msg = 'An error occurred.';
+                if (xhr.responseJSON && xhr.responseJSON.error) {
+                    msg = xhr.responseJSON.error;
+                }
+                alert('Error: ' + msg);
+            },
+            complete: function() {
+                $('#employeeSaveBtn').prop('disabled', false).html('<i class="bi bi-check-lg me-1"></i>Save Employee');
+            }
+        });
+    });
+
+    // Delete Confirm
+    $('#deleteConfirmBtn').on('click', function() {
+        var employeeId = $('#deleteEmployeeId').val();
+        $(this).prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span>Deleting...');
+
+        $.ajax({
+            url: '/workforce/api/employees/' + employeeId + '/delete/',
+            type: 'DELETE',
+            success: function(response) {
+                if (response.success) {
+                    deleteModal.hide();
+                    loadEmployees();
+                } else {
+                    alert('Error: ' + response.error);
+                }
+            },
+            error: function(xhr) {
+                var msg = 'An error occurred.';
+                if (xhr.responseJSON && xhr.responseJSON.error) {
+                    msg = xhr.responseJSON.error;
+                }
+                alert('Error: ' + msg);
+            },
+            complete: function() {
+                $('#deleteConfirmBtn').prop('disabled', false).html('<i class="bi bi-trash me-1"></i>Delete');
+            }
+        });
+    });
+
+    // Global functions
+    window.openEditModal = function(id) {
+        var emp = employeesData.find(function(e) { return e.id === id; });
+        if (!emp) return;
+
+        $('#employeeId').val(emp.id);
+        $('#empUsername').val(emp.username).prop('disabled', true);
+        $('#empEmail').val(emp.email);
+        $('#empFirstName').val(emp.first_name);
+        $('#empLastName').val(emp.last_name);
+        $('#empCode').val(emp.employee_code);
+        $('#empType').val(emp.employee_type);
+        $('#empOffice').val(emp.office_id || '');
+        $('#empPhone').val(emp.phone);
+        $('#empHireDate').val(emp.hire_date);
+        $('#empSalary').val(emp.salary);
+        $('#empPassword').val('');
+        $('#employeeModalTitle').text('Edit Employee');
+        $('#employeeModalSubtitle').text(emp.employee_code);
+        employeeModal.show();
+    };
+
+    window.openDeleteModal = function(id) {
+        var emp = employeesData.find(function(e) { return e.id === id; });
+        if (!emp) return;
+
+        $('#deleteEmployeeId').val(emp.id);
+        $('#deleteName').text(emp.first_name + ' ' + emp.last_name);
+        deleteModal.show();
+    };
+
+    // Initial load
+    loadEmployees();
+});
+</script>
 {% endblock %}

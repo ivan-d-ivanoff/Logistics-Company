@@ -4,127 +4,339 @@
 {% block page %}clients{% endblock %}
 
 {% block content %}
-<header class="app-header">
-  <h1>Clients</h1>
-  <p>List of registered clients</p>
-</header>
-
-<section class="card">
-  <div class="card-header">
-    <div>
-      <div class="card-title">All Clients</div>
-      <div class="card-subtitle">View and manage company clients</div>
-    </div>
-    <div style="display:flex;gap:12px;align-items:center;">
-      <input
-        id="clientsSearch"
-        class="search-input"
-        placeholder="Search by name, email, phone..."
-      />
-      <button class="btn btn-primary" id="addClientBtn">
-        + Add Client
-      </button>
-    </div>
-  </div>
-
-  <div class="table-wrapper">
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Phone</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody id="clientsTableBody"></tbody>
-    </table>
-  </div>
-
-  <div
-    id="clientsCountInfo"
-    style="font-size:12px;color: black;margin-top:8px;"
-  ></div>
-</section>
-
-<!-- Client Modal -->
-<div id="clientModal" class="modal" aria-hidden="true">
-  <div class="modal-backdrop" data-close="1"></div>
-
-  <div
-    class="modal-card"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="clientModalTitle"
-  >
-    <div class="modal-header">
-      <div>
-        <div id="clientModalTitle" class="modal-title">
-          Add Client
-        </div>
-        <div class="modal-subtitle">
-          Create or edit a client
-        </div>
-      </div>
-      <button
-        class="btn-icon"
-        id="clientModalCloseBtn"
-        title="Close"
-      >
-        ✖️
-      </button>
-    </div>
-
-    <form id="clientForm" class="modal-body">
-      <input type="hidden" id="clientId" />
-
-      <div class="form-grid">
-        <div class="form-group">
-          <label class="form-label">Full name</label>
-          <input id="cName" class="form-control" required />
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Email</label>
-          <input id="cEmail" type="email" class="form-control" required />
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Phone</label>
-          <input id="cPhone" class="form-control" />
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">
-            Login password (optional)
-          </label>
-          <input
-            id="cPassword"
-            type="password"
-            class="form-control"
-            placeholder="Default: client123"
-          />
-          <small
-            style="color: black;display:block;margin-top:6px;"
-          >
-            If set, this client can log in with role <b>client</b>.
-          </small>
-        </div>
-      </div>
-
-      <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-outline"
-          id="clientCancelBtn"
-        >
-          Cancel
-        </button>
-        <button type="submit" class="btn btn-primary">
-          Save
-        </button>
-      </div>
-    </form>
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
+  <div>
+    <h1 class="h3 mb-1">Clients</h1>
+    <p class="text-muted mb-0">List of registered clients</p>
   </div>
 </div>
+
+<div class="card border-0 shadow-sm">
+  <div class="card-header bg-white py-3">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
+      <div>
+        <h5 class="card-title mb-0">All Clients</h5>
+        <small class="text-muted">View and manage company clients</small>
+      </div>
+      <div class="d-flex flex-column flex-sm-row gap-2 w-100 w-md-auto">
+        <input id="clientsSearch" class="form-control" placeholder="Search by name, email, phone..." style="min-width: 250px;">
+        <button class="btn btn-primary" id="addClientBtn">
+          <i class="bi bi-plus-lg me-1"></i>Add Client
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>City</th>
+            <th>Registered</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="clientsTableBody">
+          <tr>
+            <td colspan="6" class="text-center text-muted py-4">
+              <div class="spinner-border spinner-border-sm me-2"></div>Loading clients...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card-footer bg-white">
+    <small id="clientsCountInfo" class="text-muted">Loading...</small>
+  </div>
+</div>
+
+<!-- Client Modal -->
+<div class="modal fade" id="clientModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <h5 class="modal-title" id="clientModalTitle">Add Client</h5>
+          <small class="text-muted" id="clientModalSubtitle">Create a new client profile</small>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form id="clientForm">
+        <div class="modal-body">
+          <input type="hidden" id="clientId">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">First Name <span class="text-danger">*</span></label>
+              <input id="cFirstName" class="form-control" placeholder="e.g. Anna" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Last Name <span class="text-danger">*</span></label>
+              <input id="cLastName" class="form-control" placeholder="e.g. Petrova" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Email <span class="text-danger">*</span></label>
+              <input id="cEmail" type="email" class="form-control" placeholder="e.g. anna@mail.bg" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Phone</label>
+              <input id="cPhone" class="form-control" placeholder="+359...">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">City</label>
+              <input id="cCity" class="form-control" placeholder="e.g. Sofia">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Street</label>
+              <input id="cStreet" class="form-control" placeholder="e.g. Vitosha 10">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Postal Code</label>
+              <input id="cPostal" class="form-control" placeholder="e.g. 1000">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Password</label>
+              <input id="cPassword" type="password" class="form-control" placeholder="Leave empty to keep default/existing">
+              <small class="text-muted">Default password for new clients: client123</small>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="clientSaveBtn">
+            <i class="bi bi-check-lg me-1"></i>Save Client
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete Client</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete <strong id="deleteName"></strong>?</p>
+        <p class="text-muted small mb-0">This will also delete their user account.</p>
+      </div>
+      <div class="modal-footer">
+        <input type="hidden" id="deleteClientId">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger" id="deleteConfirmBtn">
+          <i class="bi bi-trash me-1"></i>Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+var csrftoken = '{{ csrf_token }}';
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+
+$(document).ready(function() {
+    var clientsData = [];
+    var clientModal = new bootstrap.Modal(document.getElementById('clientModal'));
+    var deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+
+    // Load clients
+    function loadClients() {
+        $.ajax({
+            url: '/people/api/clients/',
+            type: 'GET',
+            success: function(response) {
+                if (response.success) {
+                    clientsData = response.clients;
+                    renderTable();
+                }
+            },
+            error: function() {
+                $('#clientsTableBody').html('<tr><td colspan="6" class="text-center text-danger py-4">Error loading clients.</td></tr>');
+            }
+        });
+    }
+
+    // Render table
+    function renderTable(filteredData) {
+        var data = filteredData || clientsData;
+        var tbody = $('#clientsTableBody');
+        tbody.empty();
+
+        if (data.length === 0) {
+            tbody.html('<tr><td colspan="6" class="text-center text-muted py-4"><i class="bi bi-people fs-1 d-block mb-2"></i>No clients found.</td></tr>');
+            $('#clientsCountInfo').text('No clients');
+            return;
+        }
+
+        data.forEach(function(c) {
+            var fullName = c.first_name + ' ' + c.last_name;
+            var row = '<tr data-id="' + c.id + '">' +
+                '<td>' + fullName + '</td>' +
+                '<td>' + c.email + '</td>' +
+                '<td>' + (c.phone || '-') + '</td>' +
+                '<td>' + (c.address_city || '-') + '</td>' +
+                '<td>' + (c.created_at || '-') + '</td>' +
+                '<td class="text-nowrap">' +
+                    '<button class="btn btn-sm btn-outline-secondary me-1" onclick="openEditModal(' + c.id + ')" title="Edit"><i class="bi bi-pencil"></i></button>' +
+                    '<button class="btn btn-sm btn-outline-danger" onclick="openDeleteModal(' + c.id + ')" title="Delete"><i class="bi bi-trash"></i></button>' +
+                '</td>' +
+                '</tr>';
+            tbody.append(row);
+        });
+
+        $('#clientsCountInfo').html('Showing <strong>' + data.length + '</strong> client' + (data.length !== 1 ? 's' : ''));
+    }
+
+    // Search
+    $('#clientsSearch').on('keyup', function() {
+        var q = $(this).val().toLowerCase();
+        if (!q) {
+            renderTable();
+            return;
+        }
+        var filtered = clientsData.filter(function(c) {
+            return c.first_name.toLowerCase().includes(q) ||
+                   c.last_name.toLowerCase().includes(q) ||
+                   c.email.toLowerCase().includes(q) ||
+                   (c.phone && c.phone.toLowerCase().includes(q)) ||
+                   (c.address_city && c.address_city.toLowerCase().includes(q));
+        });
+        renderTable(filtered);
+    });
+
+    // Add Client
+    $('#addClientBtn').on('click', function() {
+        $('#clientId').val('');
+        $('#clientForm')[0].reset();
+        $('#clientModalTitle').text('Add Client');
+        $('#clientModalSubtitle').text('Create a new client profile');
+        clientModal.show();
+    });
+
+    // Save Client
+    $('#clientForm').on('submit', function(e) {
+        e.preventDefault();
+        var id = $('#clientId').val();
+        var data = {
+            first_name: $('#cFirstName').val(),
+            last_name: $('#cLastName').val(),
+            email: $('#cEmail').val(),
+            phone: $('#cPhone').val(),
+            password: $('#cPassword').val(),
+            address: {
+                city: $('#cCity').val(),
+                street: $('#cStreet').val(),
+                postal_code: $('#cPostal').val(),
+                country: 'Bulgaria'
+            }
+        };
+
+        var url = id ? '/people/api/clients/' + id + '/update/' : '/people/api/clients/create/';
+        var method = id ? 'PUT' : 'POST';
+
+        $('#clientSaveBtn').prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span>Saving...');
+
+        $.ajax({
+            url: url,
+            type: method,
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function(response) {
+                if (response.success) {
+                    clientModal.hide();
+                    loadClients();
+                } else {
+                    alert('Error: ' + response.error);
+                }
+            },
+            error: function(xhr) {
+                var msg = 'An error occurred.';
+                if (xhr.responseJSON && xhr.responseJSON.error) {
+                    msg = xhr.responseJSON.error;
+                }
+                alert('Error: ' + msg);
+            },
+            complete: function() {
+                $('#clientSaveBtn').prop('disabled', false).html('<i class="bi bi-check-lg me-1"></i>Save Client');
+            }
+        });
+    });
+
+    // Delete Confirm
+    $('#deleteConfirmBtn').on('click', function() {
+        var clientId = $('#deleteClientId').val();
+        $(this).prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span>Deleting...');
+
+        $.ajax({
+            url: '/people/api/clients/' + clientId + '/delete/',
+            type: 'DELETE',
+            success: function(response) {
+                if (response.success) {
+                    deleteModal.hide();
+                    loadClients();
+                } else {
+                    alert('Error: ' + response.error);
+                }
+            },
+            error: function(xhr) {
+                var msg = 'An error occurred.';
+                if (xhr.responseJSON && xhr.responseJSON.error) {
+                    msg = xhr.responseJSON.error;
+                }
+                alert('Error: ' + msg);
+            },
+            complete: function() {
+                $('#deleteConfirmBtn').prop('disabled', false).html('<i class="bi bi-trash me-1"></i>Delete');
+            }
+        });
+    });
+
+    // Global functions
+    window.openEditModal = function(id) {
+        var client = clientsData.find(function(c) { return c.id === id; });
+        if (!client) return;
+
+        $('#clientId').val(client.id);
+        $('#cFirstName').val(client.first_name);
+        $('#cLastName').val(client.last_name);
+        $('#cEmail').val(client.email);
+        $('#cPhone').val(client.phone);
+        $('#cCity').val(client.address_city);
+        $('#cStreet').val(client.address_street);
+        $('#cPostal').val(client.address_postal);
+        $('#cPassword').val('');
+        $('#clientModalTitle').text('Edit Client');
+        $('#clientModalSubtitle').text(client.email);
+        clientModal.show();
+    };
+
+    window.openDeleteModal = function(id) {
+        var client = clientsData.find(function(c) { return c.id === id; });
+        if (!client) return;
+
+        $('#deleteClientId').val(client.id);
+        $('#deleteName').text(client.first_name + ' ' + client.last_name);
+        deleteModal.show();
+    };
+
+    // Initial load
+    loadClients();
+});
+</script>
 {% endblock %}

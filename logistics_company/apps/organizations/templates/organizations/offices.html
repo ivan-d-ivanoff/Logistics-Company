@@ -4,138 +4,352 @@
 {% block page %}offices{% endblock %}
 
 {% block content %}
-<header class="app-header">
-  <h1>Offices</h1>
-  <p>List of company offices</p>
-</header>
-
-<section class="card">
-  <div class="card-header">
-    <div>
-      <div class="card-title">All Offices</div>
-      <div class="card-subtitle">View and manage company offices</div>
-    </div>
-
-    <div style="display:flex;gap:12px;align-items:center;">
-      <input
-        id="officesSearch"
-        class="search-input"
-        placeholder="Search by name, city, address..."
-      />
-      <button class="btn btn-primary" id="addOfficeBtn">
-        + Add Office
-      </button>
-    </div>
-  </div>
-
-  <div class="table-wrapper">
-    <table class="table">
-      <thead>
-        <tr>
-          <th>NAME</th>
-          <th>CITY</th>
-          <th>ADDRESS</th>
-          <th>PHONE</th>
-          <th>ACTIONS</th>
-        </tr>
-      </thead>
-      <tbody id="officesTableBody"></tbody>
-    </table>
-  </div>
-
-  <div
-    id="officesCountInfo"
-    style="font-size:12px; color: black; margin-top:8px;"
-  >
-    Showing 0 results
-  </div>
-</section>
-
-<!-- Office Modal -->
-<div id="officeModal" class="modal" aria-hidden="true">
-  <div class="modal-backdrop" data-close="1"></div>
-
-  <div
-    class="modal-card"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="officeModalTitle"
-  >
-    <div class="modal-header">
-      <div>
-        <div id="officeModalTitle" class="modal-title">
-          Add Office
-        </div>
-        <div class="modal-subtitle">
-          Create or edit an office
-        </div>
-      </div>
-      <button
-        class="btn-icon"
-        id="officeModalCloseBtn"
-        title="Close"
-      >
-        ✖️
-      </button>
-    </div>
-
-    <form id="officeForm" class="modal-body">
-      <input type="hidden" id="officeId" />
-
-      <div class="form-grid">
-        <div class="form-group">
-          <label class="form-label">Office name</label>
-          <input
-            id="oName"
-            class="form-control"
-            placeholder="e.g. Downtown Office"
-            required
-          />
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">City</label>
-          <input
-            id="oCity"
-            class="form-control"
-            placeholder="e.g. Sofia"
-            required
-          />
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Address</label>
-          <input
-            id="oAddress"
-            class="form-control"
-            placeholder="e.g. Main St 1"
-            required
-          />
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Phone</label>
-          <input
-            id="oPhone"
-            class="form-control"
-            placeholder="+359..."
-          />
-        </div>
-      </div>
-
-      <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-outline"
-          id="officeCancelBtn"
-        >
-          Cancel
-        </button>
-        <button type="submit" class="btn btn-primary">
-          Save
-        </button>
-      </div>
-    </form>
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
+  <div>
+    <h1 class="h3 mb-1">Offices</h1>
+    <p class="text-muted mb-0">Manage company office locations</p>
   </div>
 </div>
+
+<div class="card border-0 shadow-sm">
+  <div class="card-header bg-white py-3">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
+      <div>
+        <h5 class="card-title mb-0">All Offices</h5>
+        <small class="text-muted">View and manage company offices</small>
+      </div>
+      <div class="d-flex flex-column flex-sm-row gap-2 w-100 w-md-auto">
+        <input id="officesSearch" class="form-control" placeholder="Search by name, city, address..." style="min-width: 250px;">
+        <button class="btn btn-primary" id="addOfficeBtn">
+          <i class="bi bi-plus-lg me-1"></i>Add Office
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Code</th>
+            <th>Name</th>
+            <th>City</th>
+            <th>Address</th>
+            <th>Phone</th>
+            <th>Hours</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="officesTableBody">
+          <tr>
+            <td colspan="7" class="text-center text-muted py-4">
+              <div class="spinner-border spinner-border-sm me-2"></div>Loading offices...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card-footer bg-white">
+    <small id="officesCountInfo" class="text-muted">Loading...</small>
+  </div>
+</div>
+
+<!-- Office Modal -->
+<div class="modal fade" id="officeModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <h5 class="modal-title" id="officeModalTitle">Add Office</h5>
+          <small class="text-muted" id="officeModalSubtitle">Create a new office location</small>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form id="officeForm">
+        <div class="modal-body">
+          <input type="hidden" id="officeId">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Office Name <span class="text-danger">*</span></label>
+              <input id="officeName" class="form-control" placeholder="e.g. Sofia Central" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Office Code <span class="text-danger">*</span></label>
+              <input id="officeCode" class="form-control" placeholder="e.g. SOF-C" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Company <span class="text-danger">*</span></label>
+              <select id="officeCompany" class="form-select" required>
+                <option value="">Select company...</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Phone</label>
+              <input id="officePhone" class="form-control" placeholder="+359...">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Working Hours</label>
+              <input id="officeHours" class="form-control" placeholder="e.g. 08:00-18:00">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">City <span class="text-danger">*</span></label>
+              <input id="officeCity" class="form-control" placeholder="e.g. Sofia" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Street <span class="text-danger">*</span></label>
+              <input id="officeStreet" class="form-control" placeholder="e.g. Vitosha Blvd 1" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Postal Code</label>
+              <input id="officePostal" class="form-control" placeholder="e.g. 1000">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="officeSaveBtn">
+            <i class="bi bi-check-lg me-1"></i>Save Office
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete Office</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete <strong id="deleteName"></strong>?</p>
+        <p class="text-muted small mb-0">This cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <input type="hidden" id="deleteOfficeId">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger" id="deleteConfirmBtn">
+          <i class="bi bi-trash me-1"></i>Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+var csrftoken = '{{ csrf_token }}';
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+
+$(document).ready(function() {
+    var officesData = [];
+    var companies = [];
+    var officeModal = new bootstrap.Modal(document.getElementById('officeModal'));
+    var deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+
+    // Load offices
+    function loadOffices() {
+        $.ajax({
+            url: '/organizations/api/offices/',
+            type: 'GET',
+            success: function(response) {
+                if (response.success) {
+                    officesData = response.offices;
+                    companies = response.companies || [];
+                    renderTable();
+                    populateCompanies();
+                }
+            },
+            error: function() {
+                $('#officesTableBody').html('<tr><td colspan="7" class="text-center text-danger py-4">Error loading offices.</td></tr>');
+            }
+        });
+    }
+
+    // Render table
+    function renderTable(filteredData) {
+        var data = filteredData || officesData;
+        var tbody = $('#officesTableBody');
+        tbody.empty();
+
+        if (data.length === 0) {
+            tbody.html('<tr><td colspan="7" class="text-center text-muted py-4"><i class="bi bi-building fs-1 d-block mb-2"></i>No offices found.</td></tr>');
+            $('#officesCountInfo').text('No offices');
+            return;
+        }
+
+        data.forEach(function(o) {
+            var row = '<tr data-id="' + o.id + '">' +
+                '<td><code>' + o.code + '</code></td>' +
+                '<td>' + o.name + '</td>' +
+                '<td>' + (o.address_city || '-') + '</td>' +
+                '<td>' + (o.address_street || '-') + '</td>' +
+                '<td>' + (o.phone || '-') + '</td>' +
+                '<td>' + (o.working_hours || '-') + '</td>' +
+                '<td class="text-nowrap">' +
+                    '<button class="btn btn-sm btn-outline-secondary me-1" onclick="openEditModal(' + o.id + ')" title="Edit"><i class="bi bi-pencil"></i></button>' +
+                    '<button class="btn btn-sm btn-outline-danger" onclick="openDeleteModal(' + o.id + ')" title="Delete"><i class="bi bi-trash"></i></button>' +
+                '</td>' +
+                '</tr>';
+            tbody.append(row);
+        });
+
+        $('#officesCountInfo').html('Showing <strong>' + data.length + '</strong> office' + (data.length !== 1 ? 's' : ''));
+    }
+
+    // Populate companies
+    function populateCompanies() {
+        var options = '<option value="">Select company...</option>';
+        companies.forEach(function(c) {
+            options += '<option value="' + c.id + '">' + c.name + '</option>';
+        });
+        $('#officeCompany').html(options);
+    }
+
+    // Search
+    $('#officesSearch').on('keyup', function() {
+        var q = $(this).val().toLowerCase();
+        if (!q) {
+            renderTable();
+            return;
+        }
+        var filtered = officesData.filter(function(o) {
+            return o.name.toLowerCase().includes(q) ||
+                   o.code.toLowerCase().includes(q) ||
+                   (o.address_city && o.address_city.toLowerCase().includes(q)) ||
+                   (o.address_street && o.address_street.toLowerCase().includes(q));
+        });
+        renderTable(filtered);
+    });
+
+    // Add Office
+    $('#addOfficeBtn').on('click', function() {
+        $('#officeId').val('');
+        $('#officeForm')[0].reset();
+        $('#officeModalTitle').text('Add Office');
+        $('#officeModalSubtitle').text('Create a new office location');
+        officeModal.show();
+    });
+
+    // Save Office
+    $('#officeForm').on('submit', function(e) {
+        e.preventDefault();
+        var id = $('#officeId').val();
+        var data = {
+            name: $('#officeName').val(),
+            code: $('#officeCode').val(),
+            company_id: $('#officeCompany').val(),
+            phone: $('#officePhone').val(),
+            working_hours: $('#officeHours').val(),
+            address: {
+                city: $('#officeCity').val(),
+                street: $('#officeStreet').val(),
+                postal_code: $('#officePostal').val(),
+                country: 'Bulgaria'
+            }
+        };
+
+        var url = id ? '/organizations/api/offices/' + id + '/' : '/organizations/api/offices/create/';
+        var method = id ? 'PUT' : 'POST';
+
+        $('#officeSaveBtn').prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span>Saving...');
+
+        $.ajax({
+            url: url,
+            type: method,
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function(response) {
+                if (response.success) {
+                    officeModal.hide();
+                    loadOffices();
+                } else {
+                    alert('Error: ' + response.error);
+                }
+            },
+            error: function(xhr) {
+                var msg = 'An error occurred.';
+                if (xhr.responseJSON && xhr.responseJSON.error) {
+                    msg = xhr.responseJSON.error;
+                }
+                alert('Error: ' + msg);
+            },
+            complete: function() {
+                $('#officeSaveBtn').prop('disabled', false).html('<i class="bi bi-check-lg me-1"></i>Save Office');
+            }
+        });
+    });
+
+    // Delete Confirm
+    $('#deleteConfirmBtn').on('click', function() {
+        var officeId = $('#deleteOfficeId').val();
+        $(this).prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span>Deleting...');
+
+        $.ajax({
+            url: '/organizations/api/offices/' + officeId + '/delete/',
+            type: 'DELETE',
+            success: function(response) {
+                if (response.success) {
+                    deleteModal.hide();
+                    loadOffices();
+                } else {
+                    alert('Error: ' + response.error);
+                }
+            },
+            error: function(xhr) {
+                var msg = 'An error occurred.';
+                if (xhr.responseJSON && xhr.responseJSON.error) {
+                    msg = xhr.responseJSON.error;
+                }
+                alert('Error: ' + msg);
+            },
+            complete: function() {
+                $('#deleteConfirmBtn').prop('disabled', false).html('<i class="bi bi-trash me-1"></i>Delete');
+            }
+        });
+    });
+
+    // Global functions
+    window.openEditModal = function(id) {
+        var office = officesData.find(function(o) { return o.id === id; });
+        if (!office) return;
+
+        $('#officeId').val(office.id);
+        $('#officeName').val(office.name);
+        $('#officeCode').val(office.code);
+        $('#officeCompany').val(office.company_id || '');
+        $('#officePhone').val(office.phone);
+        $('#officeHours').val(office.working_hours);
+        $('#officeCity').val(office.address_city);
+        $('#officeStreet').val(office.address_street);
+        $('#officePostal').val('');
+        $('#officeModalTitle').text('Edit Office');
+        $('#officeModalSubtitle').text(office.code);
+        officeModal.show();
+    };
+
+    window.openDeleteModal = function(id) {
+        var office = officesData.find(function(o) { return o.id === id; });
+        if (!office) return;
+
+        $('#deleteOfficeId').val(office.id);
+        $('#deleteName').text(office.name);
+        deleteModal.show();
+    };
+
+    // Initial load
+    loadOffices();
+});
+</script>
 {% endblock %}

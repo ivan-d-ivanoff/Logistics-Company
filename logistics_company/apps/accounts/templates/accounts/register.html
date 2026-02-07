@@ -1,9 +1,92 @@
 {% extends "base_public.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block body_attrs %}class="bg-light"{% endblock %}
+
 {% block content %}
-  <h2>Register</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Create account</button>
-  </form>
+<section class="min-vh-100 d-flex align-items-center py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-5 col-xl-4">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body p-4 p-md-5">
+            <div class="text-center mb-4">
+              <div class="bg-primary text-white rounded d-inline-flex align-items-center justify-content-center mb-3" style="width: 50px; height: 50px;">
+                <i class="bi bi-box-seam fs-4"></i>
+              </div>
+              <h4 class="fw-bold">Create Account</h4>
+              <p class="text-muted small">Register for a new account</p>
+            </div>
+
+            <ul class="nav nav-pills nav-fill mb-4" role="tablist">
+              <li class="nav-item" role="presentation">
+                <a href="{% url 'login' %}" class="nav-link">Login</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" type="button">Register</button>
+              </li>
+            </ul>
+
+            <form method="post" action="{% url 'register' %}">
+              {% csrf_token %}
+              <div class="row">
+                <div class="col-6 mb-3">
+                  <label class="form-label small">First Name</label>
+                  {{ form.first_name }}
+                  {% if form.first_name.errors %}
+                    <div class="text-danger small mt-1">{{ form.first_name.errors.0 }}</div>
+                  {% endif %}
+                </div>
+                <div class="col-6 mb-3">
+                  <label class="form-label small">Last Name</label>
+                  {{ form.last_name }}
+                  {% if form.last_name.errors %}
+                    <div class="text-danger small mt-1">{{ form.last_name.errors.0 }}</div>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label small">Email</label>
+                {{ form.email }}
+                {% if form.email.errors %}
+                  <div class="text-danger small mt-1">{{ form.email.errors.0 }}</div>
+                {% endif %}
+              </div>
+              <div class="mb-3">
+                <label class="form-label small">Phone</label>
+                {{ form.phone }}
+                {% if form.phone.errors %}
+                  <div class="text-danger small mt-1">{{ form.phone.errors.0 }}</div>
+                {% endif %}
+              </div>
+              <div class="mb-3">
+                <label class="form-label small">Username</label>
+                {{ form.username }}
+                {% if form.username.errors %}
+                  <div class="text-danger small mt-1">{{ form.username.errors.0 }}</div>
+                {% endif %}
+              </div>
+              <div class="mb-3">
+                <label class="form-label small">Password</label>
+                {{ form.password1 }}
+                {% if form.password1.errors %}
+                  <div class="text-danger small mt-1">{{ form.password1.errors.0 }}</div>
+                {% endif %}
+              </div>
+              <div class="mb-3">
+                <label class="form-label small">Repeat Password</label>
+                {{ form.password2 }}
+                {% if form.password2.errors %}
+                  <div class="text-danger small mt-1">{{ form.password2.errors.0 }}</div>
+                {% endif %}
+              </div>
+              <button type="submit" class="btn btn-primary w-100">Create Account</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 {% endblock %}

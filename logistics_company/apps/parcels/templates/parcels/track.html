@@ -3,29 +3,174 @@
 {% block title %}Track Your Parcel{% endblock %}
 
 {% block content %}
-<main class="track-main">
-  <div class="track-icon">📦</div>
-
-  <h1 class="track-title">Track Your Parcel</h1>
-
-  <p class="track-sub">
-    Enter your tracking number to see the current status of your delivery.
-  </p>
-
-  <div class="track-form">
-    <input
-      id="trackingInput"
-      class="track-input"
-      placeholder="Enter tracking number (e.g., LT-2024-001234)"
-    />
-    <button id="trackingBtn" class="btn btn-primary">
-      Track
-    </button>
+<section class="bg-light min-vh-100 d-flex align-items-center justify-content-center">
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 text-center">
+        <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+          <i class="bi bi-box-seam text-primary fs-1"></i>
+        </div>
+        <h1 class="h2 fw-bold mb-3">Track Your Parcel</h1>
+        <p class="text-muted mb-4">
+          Enter your tracking number to see the current status of your delivery.
+        </p>
+        <div class="row g-2 justify-content-center">
+          <div class="col-12 col-md-8">
+            <input
+              type="text"
+              id="trackingInput"
+              class="form-control form-control-lg"
+              placeholder="Enter tracking number (e.g., EXP202600000001)"
+            >
+          </div>
+          <div class="col-12 col-md-auto">
+            <button id="trackingBtn" class="btn btn-primary btn-lg w-100">
+              <i class="bi bi-search me-2"></i>Track
+            </button>
+          </div>
+        </div>
+        <div id="trackingResult" class="mt-4"></div>
+      </div>
+    </div>
   </div>
+</section>
+{% endblock %}
 
-  <p
-    id="trackingResult"
-    style="margin-top: 20px; font-size: 14px;"
-  ></p>
-</main>
+{% block js %}
+<script>
+$(document).ready(function() {
+    function getStatusBadgeClass(code) {
+        const badges = {
+            'CREATED': 'bg-secondary',
+            'IN_TRANSIT': 'bg-info',
+            'OUT_FOR_DELIVERY': 'bg-warning text-dark',
+            'DELIVERED': 'bg-success',
+            'RETURNED': 'bg-danger',
+            'CANCELLED': 'bg-dark'
+        };
+        return badges[code] || 'bg-secondary';
+    }
+
+    function formatResult(data) {
+        const p = data.parcel;
+        const history = data.history;
+
+        let statusIcon = p.is_delivered ? 'bi-check-circle-fill text-success' : 'bi-clock-history text-info';
+
+        let html = `
+            <div class="card border-0 shadow-sm text-start">
+                <div class="card-header bg-white py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-0"><i class="bi ${statusIcon} me-2"></i>${p.tracking_number}</h5>
+                            <small class="text-muted">${p.delivery_type}</small>
+                        </div>
+                        <span class="badge ${getStatusBadgeClass(p.status_code)} fs-6">${p.status}</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <small class="text-muted d-block">From</small>
+                            <strong>${p.sender_office || p.pickup_address || '-'}</strong>
+                        </div>
+                        <div class="col-md-6">
+                            <small class="text-muted d-block">To</small>
+                            <strong>${p.receiver_office || p.delivery_address || '-'}</strong>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <small class="text-muted d-block">Weight</small>
+                            <strong>${p.weight_kg} kg</strong>
+                        </div>
+                        <div class="col-md-4">
+                            <small class="text-muted d-block">Created</small>
+                            <strong>${p.created_at}</strong>
+                        </div>
+                        <div class="col-md-4">
+                            <small class="text-muted d-block">Delivered</small>
+                            <strong>${p.delivered_at || 'Not yet'}</strong>
+                        </div>
+                    </div>
+        `;
+
+        if (history && history.length > 0) {
+            html += `
+                    <hr>
+                    <h6 class="mb-3"><i class="bi bi-clock-history me-2"></i>Tracking History</h6>
+                    <div class="timeline">
+            `;
+            history.forEach((h, idx) => {
+                const isFirst = idx === 0;
+                html += `
+                        <div class="d-flex mb-3">
+                            <div class="me-3 text-center" style="width: 24px;">
+                                <i class="bi ${isFirst ? 'bi-circle-fill text-primary' : 'bi-circle text-muted'}" style="font-size: 10px;"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between">
+                                    <strong class="${isFirst ? '' : 'text-muted'}">${h.status}</strong>
+                                    <small class="text-muted">${h.timestamp}</small>
+                                </div>
+                                ${h.office !== '-' ? `<small class="text-muted">${h.office}</small>` : ''}
+                                ${h.note ? `<br><small class="text-muted fst-italic">${h.note}</small>` : ''}
+                            </div>
+                        </div>
+                `;
+            });
+            html += `</div>`;
+        }
+
+        html += `
+                </div>
+            </div>
+        `;
+
+        return html;
+    }
+
+    function trackParcel() {
+        const trackingNumber = $('#trackingInput').val().trim();
+        const $result = $('#trackingResult');
+        const $btn = $('#trackingBtn');
+
+        if (!trackingNumber) {
+            $result.html('<div class="alert alert-warning">Please enter a tracking number.</div>');
+            return;
+        }
+
+        $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2"></span>Searching...');
+        $result.html('');
+
+        $.ajax({
+            url: '{% url "track_parcel_api" %}',
+            type: 'GET',
+            data: { tracking_number: trackingNumber },
+            success: function(response) {
+                if (response.success) {
+                    $result.html(formatResult(response));
+                } else {
+                    $result.html(`<div class="alert alert-danger">${response.error}</div>`);
+                }
+            },
+            error: function(xhr) {
+                let msg = 'An error occurred. Please try again.';
+                if (xhr.responseJSON && xhr.responseJSON.error) {
+                    msg = xhr.responseJSON.error;
+                }
+                $result.html(`<div class="alert alert-danger">${msg}</div>`);
+            },
+            complete: function() {
+                $btn.prop('disabled', false).html('<i class="bi bi-search me-2"></i>Track');
+            }
+        });
+    }
+
+    $('#trackingBtn').on('click', trackParcel);
+    $('#trackingInput').on('keypress', function(e) {
+        if (e.which === 13) trackParcel();
+    });
+});
+</script>
 {% endblock %}

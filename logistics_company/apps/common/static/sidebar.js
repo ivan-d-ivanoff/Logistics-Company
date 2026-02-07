@@ -13,26 +13,22 @@ export default function initSidebar(activeNav) {
 
   const user = getCurrentUser();
   if (!user) {
-    // ако няма логнат → към login
     window.location = "accounts.html";
     return;
   }
 
-  // user info
   const emailEl = document.getElementById("sidebarUserEmail");
   const roleEl = document.getElementById("sidebarUserRole");
 
   if (emailEl) emailEl.textContent = user.email;
   if (roleEl) roleEl.textContent = capitalize(user.role);
 
-  // active link
   document.querySelectorAll(".sidebar-link").forEach(link => {
     if (link.dataset.nav === activeNav) {
       link.classList.add("active");
     }
   });
 
-  // client вижда само Dashboard + Parcels
   if (user.role === "client") {
     document.querySelectorAll(".sidebar-link").forEach(link => {
       if (!["dashboard", "parcels"].includes(link.dataset.nav)) {
@@ -41,7 +37,6 @@ export default function initSidebar(activeNav) {
     });
   }
 
-  // logout
   const logoutLink = document.getElementById("logoutLink");
   if (logoutLink) {
     logoutLink.addEventListener("click", e => {

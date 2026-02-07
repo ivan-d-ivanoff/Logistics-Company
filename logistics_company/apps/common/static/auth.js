@@ -15,12 +15,10 @@ export default function initAuthPage() {
   const loginTab = document.querySelector("[data-tab='login']");
   const registerTab = document.querySelector("[data-tab='register']");
 
-  // ако не сме на auth страница → излизаме
   if (!loginForm || !registerForm || !loginTab || !registerTab) {
     return;
   }
 
-  // TAB SWITCH
   loginTab.addEventListener("click", () => {
     loginTab.classList.add("active");
     registerTab.classList.remove("active");
@@ -34,7 +32,6 @@ export default function initAuthPage() {
     registerForm.style.display = "block";
   });
 
-  // LOGIN
   loginForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
@@ -53,11 +50,9 @@ export default function initAuthPage() {
 
     setCurrentUser(user);
 
-    // ⚠️ ВАЖНО: временен redirect (още не е Django URL)
     window.location.href = "/dashboard/";
   });
 
-  // REGISTER – само CLIENT
   registerForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
@@ -90,11 +85,9 @@ export default function initAuthPage() {
       role: "client"
     };
 
-    // 1) create login user
     users.push(newUser);
     saveUsers(users);
 
-    // 2) create client record
     const clients = getClients();
     if (!clients.some((c) => c.email === email)) {
       clients.push({
@@ -109,7 +102,6 @@ export default function initAuthPage() {
     setCurrentUser(newUser);
     alert("Account created as Client. You are now logged in.");
 
-    // ⚠️ временен redirect
     window.location.href = "/dashboard/";
   });
 }

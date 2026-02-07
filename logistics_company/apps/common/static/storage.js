@@ -49,7 +49,6 @@ const SEED_CLIENTS = [
   { id: 2, name: "Alice Brown", email: "alice@example.com", phone: "+1 (555) 222-0000" }
 ];
 
-// ---------- LOCALSTORAGE HELPERS ----------
 
 export function getUsers() {
   return JSON.parse(localStorage.getItem("users") || "[]");
@@ -99,7 +98,6 @@ export function setCurrentUser(user) {
   localStorage.setItem("currentUser", JSON.stringify(user));
 }
 
-/* ⚠️ ВАЖНО: redirect за Django */
 export function logout() {
   localStorage.removeItem("currentUser");
   window.location = "/";

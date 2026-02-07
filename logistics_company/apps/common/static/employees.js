@@ -9,7 +9,6 @@ import {
 
 let query = "";
 
-/* ===== helpers ===== */
 function qs(id) {
   return document.getElementById(id);
 }
@@ -19,7 +18,6 @@ function isAdmin() {
   return u && u.role === "admin";
 }
 
-/* ===== users sync (employee can log in) ===== */
 function upsertEmployeeAsUser({ name, email, password }) {
   const users = getUsers();
   const idx = users.findIndex(u => u.email === email);
@@ -50,7 +48,6 @@ function removeEmployeeUser(email) {
   saveUsers(users.filter(u => u.email !== email));
 }
 
-/* ===== modal helpers ===== */
 const modal = () => qs("employeeModal");
 
 function openModal() {
@@ -81,7 +78,6 @@ function fillForm(emp) {
   qs("empPassword").value = "";
 }
 
-/* ===== table render ===== */
 function renderEmployeesTable() {
   const tbody = qs("employeesTableBody");
   if (!tbody) return;
@@ -137,7 +133,6 @@ function renderEmployeesTable() {
   }
 }
 
-/* ===== actions ===== */
 function getEmployeeById(id) {
   return getEmployees().find(e => e.id === id);
 }
@@ -189,7 +184,6 @@ function onDeleteEmployee(id) {
   renderEmployeesTable();
 }
 
-/* ===== form submit ===== */
 function onSaveEmployee(e) {
   e.preventDefault();
   if (!isAdmin()) return alert("Only admin can manage employees.");
@@ -209,7 +203,6 @@ function onSaveEmployee(e) {
 
   const employees = getEmployees();
 
-  // EDIT
   if (idRaw) {
     const id = Number(idRaw);
     const idx = employees.findIndex(x => x.id === id);
@@ -230,7 +223,6 @@ function onSaveEmployee(e) {
     return;
   }
 
-  // CREATE
   const newEmp = {
     id: Date.now(),
     name,
@@ -249,7 +241,6 @@ function onSaveEmployee(e) {
   renderEmployeesTable();
 }
 
-/* ===== init ===== */
 export default function initEmployeesPage() {
   console.log("Employees JS loaded");
 
